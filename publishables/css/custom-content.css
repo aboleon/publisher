@@ -1,0 +1,37 @@
+.custom-content {
+    .form {
+        padding: 0 0 20px 0;
+        margin-top: 15px;
+    }
+    h3, h5 {
+        border-left: 8px solid hsla(204, 70%, 53%, 0.40);
+        padding-left: 8px;
+        color: #4e4e4e;
+        font-family: 'Nunito', sans-serif;
+        font-weight: 300;
+    }
+    .form-control {
+        color:#808080;
+    }
+    .bloc-editable {
+        margin-left: 0;
+    }
+    i.core.spinner {
+        font-size: 12px;
+        margin: 0 0 0 5px;
+    }
+}
+.nested_categories {
+    input:checked + span {
+        color:#179dcc;
+        font-weight: 700;
+    }
+}
+
+.checkables.with-query {
+        button {
+            position: absolute;
+            top: 0;
+            right: 5px;
+        }
+    }

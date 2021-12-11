@@ -1,0 +1,43 @@
+{
+    "name": "aboleon/publisher",
+    "description": "Aboleon Publisher",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+    "keywords": [
+        "publisher",
+        "aboleon"
+    ],
+    "authors": [
+        {
+            "name": "Aboleon",
+            "email": "dev@aboleon.media"
+        }
+    ],
+    "require": {
+        "php": "^7.3|^8.0",
+        "laravel/framework": "^8.40",
+        "doctrine/dbal": "^3.1",
+        "aboleon/framework": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Aboleon\\Publisher\\": "src",
+            "Aboleon\\Publisher\\Tests\\": "tests"
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.5"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Aboleon\\Publisher\\ServiceProvider",
+                "Aboleon\\Publisher\\RouteServiceProvider"
+            ],
+            "aliases": {
+                "AboleonPublisherHelpers": "Aboleon\\Publisher\\Facades\\Helpers"
+            }
+        }
+    }
+}

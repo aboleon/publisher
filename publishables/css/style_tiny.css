@@ -1,0 +1,33 @@
+@import url(https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800&display=swap);
+* {
+    font-family: 'Nunito',sans-serif;
+}
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+    font-family: 'Nunito',sans-serif;
+
+    font-size:15px;
+}
+body {
+    font-weight: 300;
+    padding:10px;
+    margin:0;
+    font-size:16px;
+    line-height: 28px;
+    background: #fff;
+    overflow-x:hidden;
+    position: relative;
+    min-height: 600px;
+}
+
+p {
+    font-family: 'Nunito',sans-serif;
+    padding:0 0 1em;
+    margin:0;
+    line-height:18px;
+}
+a {
+    color: #086ab5 ;
+    outline: 0;
+}

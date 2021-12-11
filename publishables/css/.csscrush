@@ -1,0 +1,79 @@
+{
+    "panel.crush.css": {
+        "imports": [
+            "editor.css"
+        ],
+        "datem_sum": 3272105080,
+        "options": {
+            "minify": true,
+            "formatter": null,
+            "versioning": true,
+            "boilerplate": true,
+            "vars": [],
+            "cache": true,
+            "context": null,
+            "import_path": null,
+            "output_file": null,
+            "output_dir": null,
+            "asset_dir": null,
+            "doc_root": null,
+            "vendor_target": "all",
+            "rewrite_import_urls": true,
+            "plugins": null,
+            "settings": [],
+            "stat_dump": false,
+            "source_map": false,
+            "newlines": "use-platform"
+        }
+    },
+    "replicator.crush.css": {
+        "imports": [],
+        "datem_sum": 1596409621,
+        "options": {
+            "minify": true,
+            "boilerplate": false,
+            "formatter": null,
+            "versioning": true,
+            "vars": [],
+            "cache": true,
+            "context": null,
+            "import_path": null,
+            "output_file": null,
+            "output_dir": null,
+            "asset_dir": null,
+            "doc_root": null,
+            "vendor_target": "all",
+            "rewrite_import_urls": true,
+            "plugins": null,
+            "settings": [],
+            "stat_dump": false,
+            "source_map": false,
+            "newlines": "use-platform"
+        }
+    },
+    "custom-content.crush.css": {
+        "imports": [],
+        "datem_sum": 1614337400,
+        "options": {
+            "minify": true,
+            "boilerplate": false,
+            "formatter": null,
+            "versioning": true,
+            "vars": [],
+            "cache": true,
+            "context": null,
+            "import_path": null,
+            "output_file": null,
+            "output_dir": null,
+            "asset_dir": null,
+            "doc_root": null,
+            "vendor_target": "all",
+            "rewrite_import_urls": true,
+            "plugins": null,
+            "settings": [],
+            "stat_dump": false,
+            "source_map": false,
+            "newlines": "use-platform"
+        }
+    }
+}
