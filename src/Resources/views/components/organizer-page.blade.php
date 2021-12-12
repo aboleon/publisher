@@ -15,8 +15,9 @@
                         @php
                             $name = 'elements['.$section->id .'][children]['. $element->id .']';
                             $name_loc = $name.'['. $locale .']';
-                            $node = $page->content->where('node_id', $element->id);
-                            $value = $node->first() ? ($node->first()->content ?: $node->first()->translated->where('locale', $locale)->first()?->content) : null;
+                            $content = $page->content->where('node_id', $element->id);
+                            $node = $content->first();
+                            $value = $node ? ($node->value ?: $node->translation('content', $locale)) : null;
                         @endphp
                         @switch($element->type)
                             @case('input')
@@ -34,10 +35,10 @@
                                 $list_id = $element['params']['list_id'];
                                     if (!array_key_exists($list_id, $listable_options)) {
                                         if($element['params']['tag'] == 'select') {
-                                            $listable_options[$list_id] = \Aboleon\Publisher\Models\ListsTranslated::whereIn('content_id', \Aboleon\Publisher\Models\Lists::where('list_id', $list_id)->pluck('id'))->orderBy('content')->pluck('content','content_id')->toArray();
+                                            $listable_options[$list_id] =\Aboleon\Publisher\Models\Lists::where('list_id', $list_id)->orderBy('content')->pluck('value')->toArray();
                                         }
                                         if ($element['params']['tag'] == 'checkbox') {
-                                            $listable_options[$list_id] = \Aboleon\Publisher\Models\Lists::where('list_id', $list_id)->whereNull('parent')->with(['translated','children'])->get();
+                                            $listable_options[$list_id] = \Aboleon\Publisher\Models\Lists::where('list_id', $list_id)->whereNull('parent')->with(['children'])->get();
                                         }
                                     }
                             @endphp
@@ -50,7 +51,7 @@
 
                                         @case('checkbox')
                                         @php
-                                            $currentCategories = $node->pluck('content')->toArray();
+                                            $currentCategories = $content ? $content->pluck('value')->toArray() : [];
                                         @endphp
                                         <strong>{{ $element->title }}</strong>
                                         <div class="nested_categories">
@@ -66,7 +67,7 @@
                                                             <div class="form-check">
                                                                 <input class="form-check-input" id="{{ $id }}" type="checkbox" name='{!! $name !!}[values][]' value="{!! $value->id !!}" {!! (in_array($value->id, $currentCategories) ? "checked='checked'" : null) !!}/>
                                                                 <label class="form-check-label" for="{{ $id }}">
-                                                                    <span{!! ($count ? ' class="has"':'') !!}>{!! $value->translated->content . ($count ? ' ('.$count.')' : '')!!}</span>
+                                                                    <span{!! ($count ? ' class="has"':'') !!}>{!! $value->content . ($count ? ' ('.$count.')' : '')!!}</span>
                                                                 </label>
                                                                 <span class="sublistable btn btn-xs btn-info"><i class="fas fa-plus"></i></span>
                                                             </div>
@@ -82,7 +83,7 @@
                                     <span class="btn btn-info btn-sm create-list-entry mt-2">Créer</span>
 
 
-                                        {{-- d($listable_options[$list_id]) --}}
+                                    {{-- d($listable_options[$list_id]) --}}
                                 </div>
                             @endif
                             @break

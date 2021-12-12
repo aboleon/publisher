@@ -3,13 +3,14 @@
 namespace Aboleon\Publisher\Models;
 
 use File;
+use Illuminate\Database\Eloquent\Model;
 use Image;
 use Aboleon\Publisher\Traits\Media;
 use Aboleon\Framework\Traits\{
     Helper,
     Responses};
 
-class MediaManager extends \Illuminate\Database\Eloquent\Model
+class MediaManager extends Model
 {
     protected $table = 'publisher_media_content';
     protected $editable;

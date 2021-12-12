@@ -2,6 +2,7 @@
 
 namespace Aboleon\Publisher\Models;
 
+use Aboleon\Framework\Traits\Translation;
 use Aboleon\Publisher\Repositories\Tables;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,6 +10,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Media extends Model
 {
+    use Translation;
+
+    public array $translatable = [
+      'description'
+    ];
     protected $guarded = [];
 
     public function __construct(array $attributes = [])
@@ -17,11 +23,4 @@ class Media extends Model
         $this->table = Tables::fetch('nodes_media');
         $this->timestamps = false;
     }
-
-
-    public function description(): HasMany
-    {
-        return $this->hasMany(MediaDescription::class, 'media_id');
-    }
-
 }

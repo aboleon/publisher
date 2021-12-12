@@ -1,5 +1,5 @@
 <div class="tabbable">
-    @include('aboleon.framework::lib.language_tabs')
+    <x-aboleon.framework-language-tabs id="lang_content" />
     <div class="tab-content">
         @foreach($locales as $locale)
             <div class="tab-pane fade {{  $locale == app()->getLocale() ? 'active show' : null }}"

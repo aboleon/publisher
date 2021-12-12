@@ -5,7 +5,8 @@ namespace Aboleon\Publisher\Models;
 use Aboleon\Framework\Models\Accesskeys;
 use Aboleon\Framework\Traits\{
     Locale,
-    Responses
+    Responses,
+    Translation
 };
 use Aboleon\Publisher\Repositories\Tables;
 use Illuminate\Database\Eloquent\{
@@ -23,8 +24,16 @@ class Publisher extends Model
     use Locale;
     use Responses;
     use SoftDeletes;
+    use Translation;
 
-
+    public array $translatable = [
+        'title',
+        'abstract',
+        'm_title',
+        'm_desc',
+        'nav_title',
+        'url'
+    ];
     protected $guarded = [];
 
     public function __construct(array $attributes = [])
@@ -49,40 +58,24 @@ class Publisher extends Model
 
                 foreach ($elements['children'] as $key => $content) {
                     $node = $page->content()->where('node_id', $key)->first();
-                    if (is_array($content)) {
-                        if (isset($content['arrayable'])) {
-
-                            $page->content()->where('node_id', $key)->delete();
-                            if (isset($content['values'])) {
-                                $data = [];
-                                foreach ($content['values'] as $value) {
-                                    $data[] = new Content([
-                                        'node_id' => $key,
-                                        'content' => $value
-                                    ]);
-                                }
-                                $page->content()->saveMany($data);
+                    if (isset($content['arrayable'])) {
+                        $page->content()->where('node_id', $key)->delete();
+                        if (isset($content['values'])) {
+                            $data = [];
+                            foreach ($content['values'] as $value) {
+                                $data[] = new Content([
+                                    'node_id' => $key,
+                                    'value' => $value
+                                ]);
                             }
-                        } else {
-
-                            foreach ($page->locales() as $locale) {
-                                $node
-                                    ? $node->translated()->where('locale', $locale)->update(['content' => $content[$locale]])
-                                    : $page->content()->save(new Content(['node_id' => $key]))->translated()->save(new ContentTranslated([
-                                    'content' => $content[$locale],
-                                    'locale' => $locale
-                                ]));
-                            }
+                            $page->content()->saveMany($data);
                         }
                     } else {
-
-                        $node
-                            ? $node->update(['content' => $content])
-                            : $page->content()->save(new Content([
-                            'node_id' => $key,
-                            'content' => $content
-                        ]));
-
+                        foreach ($page->locales() as $locale) {
+                            $node
+                                ? $node->setTranslation('content', $locale, $content[$locale])->save()
+                                : $page->content()->save(new Content(['node_id' => $key]))->setTranslation('content', $locale, $content[$locale])->save();
+                        }
                     }
 
                 }
@@ -98,12 +91,7 @@ class Publisher extends Model
 
     public function content(): HasMany
     {
-        return $this->hasMany(Content::class, 'pages_id')->with('translated');
-    }
-
-    public function meta(): HasOne
-    {
-        return $this->hasOne(Meta::class, 'publisher_id');
+        return $this->hasMany(Content::class, 'pages_id');
     }
 
     public function accesskey(): MorphOne

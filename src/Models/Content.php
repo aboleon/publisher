@@ -2,13 +2,18 @@
 
 namespace Aboleon\Publisher\Models;
 
+use Aboleon\Framework\Traits\Translation;
 use Aboleon\Publisher\Repositories\Tables;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Content extends Model
 {
+    use Translation;
 
+    public array $translatable = [
+        'content'
+    ];
     protected $guarded = [];
 
     public function __construct(array $attributes = [])
@@ -24,13 +29,4 @@ class Content extends Model
         return array_key_exists('tag', $element) ? $element['tag'] : 'div';
     }
 
-    public function translated(): HasMany
-    {
-        return $this->hasMany(ContentTranslated::class, 'content_id');
-    }
-
-    public function translatedFor(string $locale)
-    {
-        return $this->translated->where('locale', $locale);
-    }
 }

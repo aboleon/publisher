@@ -6,26 +6,20 @@ use Aboleon\Framework\Models\Accesskeys;
 use Aboleon\Framework\Traits\Locale;
 use Aboleon\Framework\Traits\Responses;
 use Aboleon\Framework\Traits\Validation;
-use Aboleon\Publisher\Repositories\Tables;
-use App\Http\Publisher\Controllers\Controller;
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
-use Aboleon\Publisher\Exceptions\ContentUknownException;
 use Aboleon\Publisher\Models\{
     Configs,
     Content,
-    ContentTranslated,
+    Lists,
+    ListsTranslated,
     Meta,
-    Publisher
-};
+    Publisher};
 
 use Throwable;
 
-class PublisherController extends \Aboleon\Publisher\Http\Controllers\Controller
+class PublisherController extends Controller
 {
-    private $type;
-    private $editable;
 
     use Locale;
     use Responses;
@@ -63,8 +57,9 @@ class PublisherController extends \Aboleon\Publisher\Http\Controllers\Controller
 
     public function edit(Publisher $page): Renderable
     {
+
         return view('aboleon.publisher::pages.editor')->with([
-            'page' => $page->load('configs.nodes', 'content.translated'),
+            'page' => $page->load('configs.nodes', 'content'),
             'config' => $page->configs,
             'current_locale' => $this->locale()
         ]);
@@ -72,9 +67,6 @@ class PublisherController extends \Aboleon\Publisher\Http\Controllers\Controller
 
     public function update(Publisher $page): RedirectResponse
     {
-
-     //  de(request()->input());
-
         // try {
 
         Meta::make($page);

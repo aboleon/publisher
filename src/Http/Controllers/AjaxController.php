@@ -77,10 +77,8 @@ class AjaxController
                     'list_id' => request('list_id'),
                     'parent' => request('parent')
                 ]);
-                $el->translated()->save((new ListsTranslated([
-                    'content' => request('entry'),
-                    'locale' => app()->getLocale()
-                ])));
+                $el->setTranslation('content', app()->getLocale(), request('entry'))->save();
+
                 $this->response['last_id'] = $el->id;
                 $this->response['parent'] = request('parent');
                 $this->response['callback'] = 'listables_callback';

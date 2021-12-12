@@ -33,7 +33,7 @@
             @forelse($pages as $page)
                 <tr>
                     <td>{{$page->id}}</td>
-                    <td>{!! $page->meta->title ?? ($page->title ?? trans('aboleon.framework::ui.untitled')) !!}</td>
+                    <td>{!! $page->title ?? trans('aboleon.framework::ui.untitled') !!}</td>
                 <!--<td class="status {!! $page->published ? 'success':'danger' !!}">
                         {!! trans('aboleon.framework::ui.' . ($page->published ? 'online': 'offline')) !!}
                         </td> -->
@@ -46,23 +46,6 @@
                         <x-aboleon.framework-edit-link :route="route('aboleon.publisher.pages.edit', $page->id)"/>
                         <!--<x-aboleon.framework-delete-link :route="route('aboleon.publisher.pages.destroy', $page->id)" :reference="$page->id" />-->
                     </td>
-                <!--<td class="langs">
-                        @if (config('project.config.is_multilang'))
-                    @foreach(config('project.config.locales') as $l)
-                        <a target="_blank" href="{!! url($l .'/'. $page->globalMeta->where('lg',$l)->first()->url) . ($page->access_key ? '?access_key='.$page->access_key : null) !!}">
-                                    <img width="18" src="{!! asset('vendor/flags/4x3/'.$l.'.svg') !!}" alt="{{ trans('aboleon.publisher::ui.lang.'.$l) }}" title="{{ trans('aboleon.publisher::ui.lang.'.$l) }}"/>
-                                </a>
-                            @endforeach
-                @else
-                    @if (!is_null(optional($page->meta)->url))
-                        <a target="_blank" href="{!! url($page->meta->url) . ($page->access_key ? '?access_key='.$page->access_key : null) !!}">
-                                    <img width="18" src="{!! asset('vendor/flags/4x3/'.config('app.locale').'.svg') !!}" alt="{{ trans('aboleon.publisher::ui.lang.'.config('app.locale')) }}" title="{{ trans('aboleon.publisher::ui.lang.'.config('app.locale')) }}"/>
-                                </a>
-                            @else
-                        Page sans url
-@endif
-                @endif
-                        </td>-->
                 </tr>
             @empty
                 {!! ResponseRenderers::warning(trans('aboleon.framework::ui.database.no_records')) !!}

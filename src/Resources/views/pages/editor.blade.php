@@ -1,4 +1,4 @@
-<x-aboleon.publisher-layout title="Créer une page">
+<x-aboleon.publisher-layout title="{{ $config->title }}">
 
 
     <x-aboleon.framework-response-messages/>
@@ -6,16 +6,15 @@
     <div class="bloc-editable p-5">
         <fieldset>
             <legend>
-                <i class="fas fa-th-large"></i> {{ $config->title }}
+                <i class="fas fa-th-large"></i> {{ $page->title ?? $config->title }}
             </legend>
         </fieldset>
-
         <ul id="tabs" class="nav nav-tabs admintabs" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link {{ is_null($page->meta) ? 'active' :'' }}" id="tab_meta_tab" data-bs-toggle="tab" data-bs-target="#tab_meta" type="button" role="tab" aria-controls="tab_meta" aria-selected="true">Méta</button>
+                <button class="nav-link {{ empty($page->title) ? 'active' :'' }}" id="tab_meta_tab" data-bs-toggle="tab" data-bs-target="#tab_meta" type="button" role="tab" aria-controls="tab_meta" aria-selected="true">Méta</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link {{ !is_null($page->meta) ? 'active' :'' }}" id="tab_content_tab" data-bs-toggle="tab" data-bs-target="#tab_content" type="button" role="tab" aria-controls="tab_content" aria-selected="true">Contenu</button>
+                <button class="nav-link {{ !empty($page->title) ? 'active' :'' }}" id="tab_content_tab" data-bs-toggle="tab" data-bs-target="#tab_content" type="button" role="tab" aria-controls="tab_content" aria-selected="true">Contenu</button>
             </li>
         </ul>
 
@@ -25,10 +24,10 @@
             @csrf
             @method('put')
             <div class="tab-content base">
-                <div class="tab-pane fade {{ !is_null($page->meta) ? 'show active' :'' }}" id="tab_content" role="tabpanel" aria-labelledby="tab_content_tab">
-                    @include('aboleon.publisher::pages.shared.form')
+                <div class="tab-pane fade {{ !empty($page->title) ? 'show active' :'' }}" id="tab_content" role="tabpanel" aria-labelledby="tab_content_tab">
+                  @include('aboleon.publisher::pages.shared.form')
                 </div>
-                <div class="tab-pane fade {{ is_null($page->meta) ? 'show active' :'' }}" id="tab_meta" role="tabpanel" aria-labelledby="tab_meta_tab">
+                <div class="tab-pane fade {{ empty($page->title) ? 'show active' :'' }}" id="tab_meta" role="tabpanel" aria-labelledby="tab_meta_tab">
                     @include('aboleon.publisher::pages.shared.tab_meta')
                 </div>
             </div>
