@@ -4,6 +4,7 @@ namespace Aboleon\Publisher\Models;
 
 use Aboleon\Framework\Models\Accesskeys;
 use Aboleon\Framework\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Aboleon\Framework\Traits\{
     Locale,
     Responses,
@@ -108,5 +109,22 @@ class Publisher extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
+    }
+
+    public function metaImage(): string|null
+    {
+        $dims = (new FileUploadImages)->setWidthHeight($this->configs['configs']['meta']['img']);
+        $meta_img = $this->key() . '/meta_' . $dims[0]['width'] . '.jpg';
+
+        return (Storage::disk('publisher')->exists($meta_img)) ? asset(Storage::disk('publisher')->url($meta_img)) : null;
+    }
+
+    public function printMetaImage(?string $class=null, ?string $alt=null): string|null
+    {
+        $meta_img = $this->metaImage();
+        if ($meta_img) {
+           return '<img class="'.($class ?? 'img-fluid').'" src="'.$meta_img .'" alt="'.($alt ?? $this->title).'"/>';
+        }
+        return null;
     }
 }
