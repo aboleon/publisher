@@ -38,7 +38,7 @@ class PublisherController extends Controller
     {
         $page = Publisher::create([
             'type' => $launchpad->id,
-            'author' => auth()->id()
+            'author_id' => auth()->id()
         ]);
 
         Accesskeys::create([
