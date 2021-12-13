@@ -33,7 +33,6 @@
         </div>
     </div>
     <div class="mb-3 meta col-xxl-5">
-
         <div class="mb-3 uploadable" data-identifier="meta" data-config-id="{{$config->id}}">
             <div class="controls">
                 <strong><i class="fa fa-image"></i> {{trans('aboleon.framework::ui.form_labels.image')}}

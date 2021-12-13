@@ -3,6 +3,7 @@
 namespace Aboleon\Publisher\Models;
 
 use Aboleon\Framework\Models\Accesskeys;
+use Aboleon\Framework\Models\User;
 use Aboleon\Framework\Traits\{
     Locale,
     Responses,
@@ -102,5 +103,10 @@ class Publisher extends Model
     public function key()
     {
         return $this->accesskey->access_key;
+    }
+
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'author_id');
     }
 }
