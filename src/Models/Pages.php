@@ -200,7 +200,9 @@ class Pages extends Model
             return view('aboleon.publisher::errors.404')->with('message', trans('errors.404'));
         }
 
-        $config = collect(array_merge_recursive((array)config('project.content.' . $data->type), (array)config('project.content.' . $data->type . '_' . $data->taxonomy)));
+       // $config = collect(array_merge_recursive((array)config('project.content.' . $data->type), (array)config('project.content.' . $data->type . '_' . $data->taxonomy)));
+
+        $config = collect();
         if (!$config->has('has')) {
             return view('aboleon.publisher::errors.404')->with('message', trans('errors.has_no_list'));
         }

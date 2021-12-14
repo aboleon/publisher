@@ -17,34 +17,51 @@
             <tr>
             <tr>
                 <th>#</th>
-                <th style="width: 50%">{!! trans('aboleon.publisher::ui.meta.title')!!}</th>
-            <!--<th>{!! trans('aboleon.publisher::ui.meta.status')!!}</th>-->
-                <th>{!! trans('aboleon.publisher::ui.meta.updated') !!}</th>
+                <th>{!! trans('aboleon.publisher::ui.meta.title')!!}</th>
+                <th class="text-center" style="width: 100px">{!! trans('aboleon.publisher::ui.meta.status')!!}</th>
+                <th style="width: 180px" class="text-center">{!! trans('aboleon.publisher::ui.meta.updated') !!}</th>
                 @if (!$type)
                     <th>{!! trans('aboleon.publisher::ui.meta.type') !!}</th>
                 @endif
-                <th>Parent</th>
-                <th>{!! trans('aboleon.framework::ui.edit') !!}</th>
-            <!--<th>{!! trans('aboleon.framework::ui.buttons.show') !!}</th>-->
+                <th style="width:88px"></th>
             </tr>
             </thead>
 
             <tbody>
             @forelse($pages as $page)
                 <tr>
-                    <td>{{$page->id}}</td>
+                    <td>{{ $page->id}}</td>
                     <td>{!! $page->title ?? trans('aboleon.framework::ui.untitled') !!}</td>
-                <!--<td class="status {!! $page->published ? 'success':'danger' !!}">
+                    <td class="status {!! $page->published ? 'success':'danger' !!}">
                         {!! trans('aboleon.framework::ui.' . ($page->published ? 'online': 'offline')) !!}
-                        </td> -->
-                    <td class="time">{!! $page->updated_at !!}</td>
+                    </td>
+                    <td class="time text-center">{!! $page->updated_at->format('d/m/Y à H:i') !!}</td>
                     @if(!($type))
                         <td>{!! $page->configs->title !!}</td>
                     @endif
-                    <td>{!! ($page->hasParent ? ($page->hasParent->meta->title ?? null) : null) !!}</td>
                     <td>
-                        <x-aboleon.framework-edit-link :route="route('aboleon.publisher.pages.edit', $page->id)"/>
-                        <!--<x-aboleon.framework-delete-link :route="route('aboleon.publisher.pages.destroy', $page->id)" :reference="$page->id" />-->
+                        <div class="dropdown">
+                            <button class="btn btn-xs btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuLink_submenu_actions_{{$page->id}}" data-bs-toggle="dropdown"
+                                    aria-expanded="false">Actions
+                            </button>
+
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink_actions_{{$page->id}}">
+                                <li>
+                                    <a target="_blank" href="{{ url($page->url) }}" class="dropdown-item"><i class="fas fa-file"></i> Visualiser</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('aboleon.publisher.pages.edit', $page->id) }}"><i class="fas fa-pen"></i> Éditer</a>
+                                </li>
+
+                                <x-aboleon.framework-delete-link-actions modalreference="page_action_{{ $page->id }}" icon='<i class="fas fa-trash"></i>' title="Supprimer"/>
+                            </ul>
+                        </div>
+                        <x-aboleon.framework-delete-link-modal :reference="$page->id"
+                                                               :route="route('aboleon.publisher.pages.destroy', $page->id)"
+                                                               question="Supprimer ce contenu ?"
+                                                               :title="__('aboleon.framework::ui.buttons.delete')"
+                                                               modalreference="page_action_{{ $page->id }}"/>
                     </td>
                 </tr>
             @empty

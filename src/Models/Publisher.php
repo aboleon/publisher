@@ -36,6 +36,7 @@ class Publisher extends Model
         'nav_title',
         'url'
     ];
+    public bool $forceDelete = false;
     protected $guarded = [];
 
     public function __construct(array $attributes = [])
@@ -126,5 +127,26 @@ class Publisher extends Model
            return '<img class="'.($class ?? 'img-fluid').'" src="'.$meta_img .'" alt="'.($alt ?? $this->title).'"/>';
         }
         return null;
+    }
+
+    public function removeChildren(): static
+    {
+        if ($this->forceDelete) {
+            $children = self::withTrashed()->where('parent', $this->id);
+        } else {
+            $children = self::where('parent', $this->id);
+        }
+
+        if ($children->count() > 1) {
+            foreach ($children->cursor() as $item) {
+                if ($this->forceDelete) {
+                    Media::removeAttachedMedia($item);
+                }
+                $item->{$this->forceDelete ? 'forceDelete' : 'delete'}();
+                $item->removeChildren();
+                $this->pushMessages($item);
+            }
+        }
+        return $this;
     }
 }

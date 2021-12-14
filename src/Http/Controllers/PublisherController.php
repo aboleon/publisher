@@ -14,7 +14,8 @@ use Aboleon\Publisher\Models\{
     Lists,
     ListsTranslated,
     Meta,
-    Publisher};
+    Publisher
+};
 
 use Throwable;
 
@@ -25,7 +26,7 @@ class PublisherController extends Controller
     use Responses;
     use Validation;
 
-    public function index(?string $oftype=null): Renderable
+    public function index(?string $oftype = null): Renderable
     {
         $type = !empty($oftype) ? Configs::query()->where('type', $oftype)->first() : null;
         return view('aboleon.publisher::pages.index')->with([
@@ -83,21 +84,12 @@ class PublisherController extends Controller
         return $this->sendResponse();
     }
 
-    public function destroy($id): RedirectResponse
+    public function destroy(Publisher $page): RedirectResponse
     {
         try {
-            $page = Publisher::withTrashed()->findOrFail($id);
-            $config = collect(config('project.content.' . $page->type));
-            /*
-                        if (!$config->contains('archive')) {
-                            $page->enableForceDelete();
-                        }
-             */
-            // Children
-            $page->removeChildren();
-
             if ($page->forceDelete) {
                 //Media::removeAttachedMedia($page);
+                // $page->removeChildren
                 $page->forceDelete();
                 $this->responseNotice("Le contenu a été définitivement supprimé.");
             } else {
