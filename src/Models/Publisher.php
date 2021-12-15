@@ -149,4 +149,14 @@ class Publisher extends Model
         }
         return $this;
     }
+
+    public function contentOfCategory(string $type, int $node, array $categories, int $limit=null)
+    {
+        $type_id = Configs::where('type', $type)->first()->id;
+
+        return Publisher::select('publisher.id as id', 'publisher.*')->where('type', $type_id)
+            ->join('publisher_content as b', function($join) use($categories, $node) {
+                $join->on('b.pages_id','=','publisher.id')->where('b.node_id',$node)->whereIn('value', $categories);
+            })->distinct()->with('content','accesskey')->inRandomOrder()->take($limit)->get();
+    }
 }
