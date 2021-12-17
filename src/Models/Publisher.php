@@ -114,7 +114,7 @@ class Publisher extends Model
 
     public function metaImage(): string|null
     {
-        $dims = (new FileUploadImages)->setWidthHeight($this->configs['configs']['meta']['img']);
+        $dims = (new FileUploadImages)->setWidthHeight(cache('publisher_configs')->where('id', $this->type)->first()['configs']['meta']['img']);
         $meta_img = $this->key() . '/meta_' . $dims[0]['width'] . '.jpg';
 
         return (Storage::disk('publisher')->exists($meta_img)) ? asset(Storage::disk('publisher')->url($meta_img)) : null;
@@ -158,5 +158,13 @@ class Publisher extends Model
             ->join('publisher_content as b', function($join) use($categories, $node) {
                 $join->on('b.pages_id','=','publisher.id')->where('b.node_id',$node)->whereIn('value', $categories);
             })->distinct()->with('content','accesskey')->inRandomOrder()->take($limit)->get();
+    }
+
+    public function scopeExclude($query, array $exclude=[])
+    {
+        if ($exclude) {
+            $query->whereNotIn('publisher.id', $exclude);
+        }
+        return $query;
     }
 }

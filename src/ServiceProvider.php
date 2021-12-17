@@ -2,6 +2,8 @@
 
 namespace Aboleon\Publisher;
 
+use Aboleon\Publisher\Models\Configs;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Aboleon\Publisher\Components\{
     Layout,
@@ -20,7 +22,15 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function boot()
     {
         app()->bind('aboleon_publisher_helpers', function() {
-            return new Models\Helpers();
+            return new Models\Helpers;
+        });
+
+        app()->bind('publisher', function() {
+            return new Models\Publisher;
+        });
+
+        Cache::rememberForever('publisher_configs', function() {
+           return Configs::with('nodes')->get();
         });
 
         $this->loadViewsFrom(__DIR__ . '/Resources/views', 'aboleon.publisher');
@@ -45,6 +55,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                 Install::class,
             ]);
         }
+
     }
 
     private function publishConfig()

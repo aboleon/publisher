@@ -36,7 +36,8 @@
                 "Aboleon\\Publisher\\RouteServiceProvider"
             ],
             "aliases": {
-                "AboleonPublisherHelpers": "Aboleon\\Publisher\\Facades\\Helpers"
+                "AboleonPublisherHelpers": "Aboleon\\Publisher\\Facades\\Helpers",
+                "Publisher": "Aboleon\\Publisher\\Facades\\Publisher"
             }
         }
     }

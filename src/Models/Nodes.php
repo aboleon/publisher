@@ -64,7 +64,7 @@ class Nodes extends Model
 
     public function media(): HasMany
     {
-        return $this->hasMany(Media::class,'node_id')->with('description');
+        return $this->hasMany(Media::class,'node_id');//->with('description');
     }
 
 }

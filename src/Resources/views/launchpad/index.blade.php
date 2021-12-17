@@ -4,7 +4,6 @@
         <a class="btn btn-sm btn-success" href="{{ route('aboleon.publisher.launchpad.create') }}">Créer</a>
     </div>
 
-    <div class="bg-white container my-3 p-3 rounded">
 
         <x-aboleon.framework-response-messages/>
 
@@ -31,7 +30,7 @@
                     <td class="time">{!! $item->created_at !!}</td>
                     <td>
                         <div class="dropdown">
-                            <button class="btn btn-sm btn-info dropdown-toggle" type="button"
+                            <button class="btn btn-xs btn-secondary dropdown-toggle" type="button"
                                     id="dropdownMenuLink_submenu_launchpad_{{$item->id}}" data-bs-toggle="dropdown"
                                 aria-expanded="false">Actions
                             </button>
@@ -63,5 +62,4 @@
             </tbody>
         </table>
         {{ $pages->links() }}
-    </div>
 </x-aboleon.publisher-layout>
