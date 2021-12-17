@@ -12,7 +12,7 @@ class Lists
     public array $rendered;
     public array $links;
     public string $locale;
-    public array $listable;
+    public array $listable = [];
     public string $prefix;
     protected $collection;
 
