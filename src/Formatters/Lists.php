@@ -17,9 +17,28 @@ class Lists
     protected $collection;
 
 
-    public function prefix(string $prefix = ''): static
+    public function __construct()
     {
-        $this->prefix = $prefix;
+        $this->locale = app()->getLocale();
+    }
+    public function assigned(): array
+    {
+        return $this->listable['assigned'];
+    }
+
+    public function buildCollection(int $list_id)
+    {
+        $this->collection = Listables::where('list_id', $list_id)->get();
+        return $this;
+    }
+
+    public function crawl($item): static
+    {
+        $this->rendered[$item['id']] = $item['content'];
+        $this->listable['ids'][] = $item['id'];
+        if (!is_null($item['parent'])) {
+            $this->loop($item, $this->collection);
+        }
         return $this;
     }
 
@@ -40,22 +59,6 @@ class Lists
         return $this;
     }
 
-    public function filterAssigned(Collection $content): static
-    {
-        $this->listable['assigned'] = $content->where('node_id', $this->listable['node_id'])->pluck('value')->toArray();
-        $this->listable['names'] = $this->listable['assigned']
-            ? collect(Listables::whereIn('id', $this->listable['assigned'])->get()->toArray())
-            : null;
-
-        return $this;
-    }
-
-    public function buildCollection(int $list_id)
-    {
-        $this->collection = Listables::where('list_id', $list_id)->get();
-        return $this;
-    }
-
     public function fetchById($id)
     {
         $cat = Listables::where('id', $id)->first()->toArray();
@@ -64,71 +67,9 @@ class Lists
         return $this;
     }
 
-    public function crawl($item): static
-    {
-        $this->rendered[$item['id']] = $item['content'];
-        $this->listable['ids'][] = $item['id'];
-        if (!is_null($item['parent'])) {
-            $this->loop($item, $this->collection);
-        }
-        return $this;
-    }
-
-    public function params(): array
-    {
-        return [
-            'list_id' => $this->listable['list_id'],
-            'node_id' => $this->listable['node_id'],
-        ];
-    }
-
     public function fetchIds()
     {
         return $this->listable['ids'];
-    }
-
-    public function param(string $param): string|int|null
-    {
-        return $this->params()[$param] ?? null;
-    }
-
-    public function assigned(): array
-    {
-        return $this->listable['assigned'];
-    }
-
-    public function links(): array
-    {
-        return $this->regroup($this->listable['names'])->fetchLinks();
-    }
-
-    public function __construct()
-    {
-        $this->locale = app()->getLocale();
-    }
-
-    public function data()
-    {
-        return $this->listable;
-    }
-
-    public function regroup(Collection $array): static
-    {
-        $this->rendered = [];
-        foreach ($array as $item) {
-            $this->rendered[$item['id']] = [
-                $item['content'][$this->locale]
-            ];
-            if (!is_null($item['parent'])) {
-                $this->loop($item, $array);
-            }
-        }
-        return $this;
-    }
-
-    public function fetchRaw(): array
-    {
-        return $this->rendered;
     }
 
     public function fetchLinks(string $separator = ' / '): array
@@ -151,6 +92,65 @@ class Lists
             }
         }
         return $this->links;
+    }
+
+    public function fetchRaw(): array
+    {
+        return $this->rendered;
+    }
+
+    public function filterAssigned(Collection $content): static
+    {
+        $this->listable['assigned'] = $content->where('node_id', $this->listable['node_id'])->pluck('value')->toArray();
+        $this->listable['names'] = $this->listable['assigned']
+            ? collect(Listables::whereIn('id', $this->listable['assigned'])->get()->toArray())
+            : null;
+
+        return $this;
+    }
+
+    public function prefix(string $prefix = ''): static
+    {
+        $this->prefix = $prefix;
+        return $this;
+    }
+
+    public function param(string $param): string|int|null
+    {
+        return $this->params()[$param] ?? null;
+    }
+
+    public function params(): array
+    {
+        return [
+            'list_id' => $this->listable['list_id'],
+            'node_id' => $this->listable['node_id'],
+        ];
+    }
+
+    public function links(): array
+    {
+        return $this->regroup($this->listable['names'])->fetchLinks();
+    }
+
+
+    public function data()
+    {
+        return $this->listable;
+    }
+
+    public function regroup(Collection $array): static
+    {
+        $this->rendered = [];
+        foreach ($array as $item) {
+            $this->rendered[$item['id']] = [
+                $item['content'][$this->locale]
+            ];
+            if (!is_null($item['parent'])) {
+                $this->loop($item, $array);
+            }
+        }
+        return $this;
     }
 
     protected function loop($item, $array)
