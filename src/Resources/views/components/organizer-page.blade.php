@@ -67,9 +67,13 @@
                                                             <div class="form-check">
                                                                 <input class="form-check-input" id="{{ $id }}" type="checkbox" name='{!! $name !!}[values][]' value="{!! $value->id !!}" {!! (in_array($value->id, $currentCategories) ? "checked='checked'" : null) !!}/>
                                                                 <label class="form-check-label" for="{{ $id }}">
-                                                                    <span{!! ($count ? ' class="has"':'') !!}>{!! $value->content . ($count ? ' ('.$count.')' : '')!!}</span>
+                                                                    <span{!! ($count ? ' class="has"':'') !!}>{!! $value->content !!}</span> {{ ($count ? ' ('.$count.')' : '') }}
                                                                 </label>
-                                                                <span class="sublistable btn btn-xs btn-info"><i class="fas fa-plus"></i></span>
+                                                                <span class="sublistable btn btn-xs btn-info float-end"><i class="fas fa-plus"></i></span>
+                                                                <span class="edit btn btn-xs btn-warning float-end"><i class="fas fa-pen"></i></span>
+                                                                @role('dev')
+                                                                <span class="float-end me-1">{{ $value->id }}</span>
+                                                                @endrole
                                                             </div>
                                                             {!! $value->printNestedTree($currentCategories, $name.'[values][]')!!}
                                                         </li>
@@ -101,8 +105,8 @@
                                 @forelse ($element->media as $media)
 
                                     <div class="unlinkable uploaded-image" data-id="{{ $media->id }}">
-                                        <a target="_blank" href="{{ asset(Storage::disk('publisher')->url($page->key().'/'.$dims[0]['width'].'_'.$media->content)) }}">
-                                            <img src="{{ asset(Storage::disk('publisher')->url($page->key().'/'.$dims[count($dims)-1]['width'].'_'.$media->content)) }}" alt=""/>
+                                        <a target="_blank" href="{{ Storage::disk('publisher')->url($page->key().'/'.$dims[0]['width'].'_'.$media->content) }}">
+                                            <img src="{{ Storage::disk('publisher')->url($page->key().'/'.$dims[count($dims)-1]['width'].'_'.$media->content) }}" alt=""/>
                                         </a>
                                         <div>
                                             @foreach($dims as $dim)

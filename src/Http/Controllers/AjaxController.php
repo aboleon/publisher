@@ -90,6 +90,26 @@ class AjaxController
         return $this->response;
 
     }
+    protected function editListableItem(): array
+    {
+        if (!request()->filled('name')) {
+            $this->responseAbort("Veuillez saisir un intitulé.");
+        }
+        if (!request()->filled('id')) {
+            $this->responseAbort("L'id de la catégorie est absent.");
+        }
+        if ($this->canContinue()) {
+            try {
+                $el = Lists::find(request('id'));
+                $el->setTranslation('content', app()->getLocale(), request('name'))->save();
+                $this->response['callback'] = 'editListableItem';
+            } catch(\Throwable $e) {
+                $this->responseException($e);
+            }
+        }
+        return $this->response;
+
+    }
 
 
     protected function ajaxFileUploads($request): array

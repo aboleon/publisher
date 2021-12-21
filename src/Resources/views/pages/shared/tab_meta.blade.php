@@ -48,8 +48,8 @@
             <div class="uploaded">
                 @if (Storage::disk('publisher')->exists($file))
                     <div class="unlinkable uploaded-image">
-                        <a target="_blank" href="{{ asset(Storage::disk('publisher')->url($file)) }}">
-                            <img class="img-fluid" src="{{ asset(Storage::disk('publisher')->url($file)) }}" alt=""/>
+                        <a target="_blank" href="{{ Storage::disk('publisher')->url($file) }}">
+                            <img class="img-fluid" src="{{ Storage::disk('publisher')->url($file) }}" alt=""/>
                         </a>
                         <div>
                             @foreach($dims as $dim)

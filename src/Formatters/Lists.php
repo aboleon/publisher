@@ -21,6 +21,7 @@ class Lists
     {
         $this->locale = app()->getLocale();
     }
+
     public function assigned(): array
     {
         return $this->listable['assigned'];
@@ -162,6 +163,5 @@ class Lists
             $this->rendered[$item['id']][] = $parent['content'][$this->locale] ?? $parent['content'];
             $this->loop($parent, $array);
         }
-
     }
 }

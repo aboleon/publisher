@@ -117,7 +117,7 @@ class Publisher extends Model
         $dims = (new FileUploadImages)->setWidthHeight(cache('publisher_configs')->where('id', $this->type)->first()['configs']['meta']['img']);
         $meta_img = $this->key() . '/meta_' . $dims[0]['width'] . '.jpg';
 
-        return (Storage::disk('publisher')->exists($meta_img)) ? asset(Storage::disk('publisher')->url($meta_img)) : null;
+        return (Storage::disk('publisher')->exists($meta_img)) ? Storage::disk('publisher')->url($meta_img) : null;
     }
 
     public function printMetaImage(?string $class=null, ?string $alt=null): string|null

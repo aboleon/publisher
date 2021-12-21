@@ -101,7 +101,7 @@ class FileUploadImages extends \Aboleon\Framework\Models\FileUploadImages implem
                     $this->response['callback'] = 'croppedHome';
                     $this->response['size'] = request('size');
                     $this->response['h'] = $this->image->height();
-                    $this->response['image'] = asset(Storage::disk('publisher')->url($this->path . request('size') . '.jpg?' . time()));
+                    $this->response['image'] = Storage::disk('publisher')->url($this->path . request('size') . '.jpg?' . time());
                 }
             }
         } else {
@@ -185,7 +185,7 @@ class FileUploadImages extends \Aboleon\Framework\Models\FileUploadImages implem
                 })->stream($this->mime_type, 80));
 
             $array[] = [
-                'url' => asset(Storage::disk('publisher')->url($file . '?' . time())),
+                'url' => Storage::disk('publisher')->url($file . '?' . time()),
                 'width' => $v['width'],
                 'height' => $v['height']
             ];
@@ -215,7 +215,7 @@ class FileUploadImages extends \Aboleon\Framework\Models\FileUploadImages implem
                 })->stream('jpg', 80));
 
             $array[] = [
-                'url' => asset(Storage::disk('publisher')->url($file . '?' . time())),
+                'url' => Storage::disk('publisher')->url($file . '?' . time()),
                 'width' => $v['width'],
                 'height' => $v['height']
             ];
