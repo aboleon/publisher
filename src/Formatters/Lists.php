@@ -140,15 +140,17 @@ class Lists
         return $this->listable;
     }
 
-    public function regroup(Collection $array): static
+    public function regroup(?Collection $array): static
     {
         $this->rendered = [];
-        foreach ($array as $item) {
-            $this->rendered[$item['id']] = [
-                $item['content'][$this->locale]
-            ];
-            if (!is_null($item['parent'])) {
-                $this->loop($item, $array);
+        if ($array) {
+            foreach ($array as $item) {
+                $this->rendered[$item['id']] = [
+                    $item['content'][$this->locale]
+                ];
+                if (!is_null($item['parent'])) {
+                    $this->loop($item, $array);
+                }
             }
         }
         return $this;
