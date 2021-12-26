@@ -2,6 +2,7 @@
 
 namespace Aboleon\Publisher;
 
+use Aboleon\Framework\Components\MetaTags;
 use Aboleon\Publisher\Models\Configs;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
@@ -42,6 +43,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             OrganizerNodeParams::class,
             OrganizerPage::class,
             OrganizerReplicable::class,
+            MetaTags::class
         ]);
 
         if ($this->app->runningInConsole()) {
