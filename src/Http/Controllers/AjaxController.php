@@ -6,10 +6,11 @@ use Aboleon\Publisher\Models\{
     FileUploadImages,
     Configs,
     Lists,
-    ListsTranslated};
+    Publisher};
 use Aboleon\Framework\Traits\Responses;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 
 class AjaxController
 {
@@ -49,21 +50,6 @@ class AjaxController
             $this->responseSuccess("La liste a été créé.");
         }
         return response()->json($this->response);
-    }
-
-    protected function publishedStatus(Request $request): array
-    {
-        $result = [];
-        if ($request->filled('class') && $request->filled('id') && class_exists($request['class'])) {
-            $object = new $request['class'];
-            $object = $object->find($request['id']);
-            $object->published = ($request['from'] == 'online' ? null : 1);
-            $object->save();
-            $result['success'] = 1;
-        } else {
-            $result['error'] = 1;
-        }
-        return $result;
     }
 
     protected function AddEntryToList(): array
@@ -115,6 +101,16 @@ class AjaxController
     protected function ajaxFileUploads($request): array
     {
         return (new FileUploadImages())->ajax($request)->fetchResponse();
+    }
+
+    protected function publishedStatus(): array
+    {
+        Publisher::where('id',request('id'))->update(['published' => (request('published') == 'true' ? 1 : null)]);
+        $this->responseNotice(trans('aboleon.framework::ui.statusChange', [
+            'status' => trans('aboleon.framework::ui.' . (request()->published == 'true' ? 'online' : 'offline'))
+        ]));
+        //Artisan::call('cache:clear');
+        return $this->response;
     }
 
 

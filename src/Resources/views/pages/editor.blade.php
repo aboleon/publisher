@@ -4,35 +4,52 @@
     <x-aboleon.framework-response-messages/>
 
     <div class="bloc-editable p-5">
-        <fieldset>
-            <legend>
-                <i class="fas fa-th-large"></i> {{ $page->title ?? $config->title }}
-            </legend>
-        </fieldset>
-        <ul id="tabs" class="nav nav-tabs admintabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link {{ empty($page->title) ? 'active' :'' }}" id="tab_meta_tab" data-bs-toggle="tab" data-bs-target="#tab_meta" type="button" role="tab" aria-controls="tab_meta" aria-selected="true">Méta</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link {{ !empty($page->title) ? 'active' :'' }}" id="tab_content_tab" data-bs-toggle="tab" data-bs-target="#tab_content" type="button" role="tab" aria-controls="tab_content" aria-selected="true">Contenu</button>
-            </li>
-        </ul>
-
-
-        <form id="editor" action="{{ route('aboleon.publisher.pages.update', $page->id) }}" method="post"
-              data-ajax="{{ route('aboleon.publisher.ajax') }}" data-accesskey="{{ $page->key() }}">
+        <form id="editor"
+              method="post"
+              action="{{ route('aboleon.publisher.pages.update', $page->id) }}"
+              data-ajax="{{ route('aboleon.publisher.ajax') }}"
+              data-id="{{ $page->id }}"
+              data-accesskey="{{ $page->key() }}">
             @csrf
             @method('put')
+
+            <fieldset>
+                <legend id="topbar-editor">
+                    <div>
+                        <i class="fas fa-th-large"></i> {{ $page->title ?? $config->title }}
+                        <div class="d-flex">
+
+                            <div id="status-container" data-url="panel/Publisher/ajax" class="me-4">
+                                <label id="status">
+                                    <input type="checkbox" name="temp"
+                                           class="ace ace-switch ace-switch-4 btn-rotate" {!! $page->published ? 'checked' : null !!} />
+                                    <span class="lbl"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <x-aboleon.framework-btn-save className="topbar-save"/>
+
+                </legend>
+
+            </fieldset>
+            <ul id="tabs" class="nav nav-tabs admintabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link {{ empty($page->title) ? 'active' :'' }}" id="tab_meta_tab" data-bs-toggle="tab" data-bs-target="#tab_meta" type="button" role="tab" aria-controls="tab_meta" aria-selected="true">Méta</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link {{ !empty($page->title) ? 'active' :'' }}" id="tab_content_tab" data-bs-toggle="tab" data-bs-target="#tab_content" type="button" role="tab" aria-controls="tab_content" aria-selected="true">Contenu</button>
+                </li>
+            </ul>
+
             <div class="tab-content base">
                 <div class="tab-pane fade {{ !empty($page->title) ? 'show active' :'' }}" id="tab_content" role="tabpanel" aria-labelledby="tab_content_tab">
-                  @include('aboleon.publisher::pages.shared.form')
+                    @include('aboleon.publisher::pages.shared.form')
                 </div>
-                <div class="tab-pane fade {{ empty($page->title) ? 'show active' :'' }}" id="tab_meta" role="tabpanel" aria-labelledby="tab_meta_tab">
+                <div class="tab-pane mb-4 fade {{ empty($page->title) ? 'show active' :'' }}" id="tab_meta" role="tabpanel" aria-labelledby="tab_meta_tab">
                     @include('aboleon.publisher::pages.shared.tab_meta')
                 </div>
             </div>
-
-            <x-aboleon.framework-btn-save/>
         </form>
     </div>
 
@@ -55,6 +72,15 @@
     @include('aboleon.framework::lib.fileUpload')
 
     @push('js')
+        <script src="{{ asset('vendor/garand-sticky/jquery.sticky.js') }}"></script>
         <script src="{{ asset('aboleon/publisher/js/editor.js') }}"></script>
+        <script>
+          $(function () {
+            $('#topbar-editor').sticky({topSpacing: 0});
+            $('#status input').click(function () {
+              ajax('action=publishedStatus&id=' + $('#editor').data('id') + '&published=' + ($(this).is(':checked')), $('#status-container'));
+            });
+          });
+        </script>
     @endpush
 </x-aboleon.publisher-layout>

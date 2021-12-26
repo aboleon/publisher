@@ -35,7 +35,7 @@
                                 $list_id = $element['params']['list_id'];
                                     if (!array_key_exists($list_id, $listable_options)) {
                                         if($element['params']['tag'] == 'select') {
-                                            $listable_options[$list_id] =\Aboleon\Publisher\Models\Lists::where('list_id', $list_id)->orderBy('content')->pluck('value')->toArray();
+                                            $listable_options[$list_id] =\Aboleon\Publisher\Models\Lists::where('list_id', $list_id)->orderBy('content')->pluck('content')->toArray();
                                         }
                                         if ($element['params']['tag'] == 'checkbox') {
                                             $listable_options[$list_id] = \Aboleon\Publisher\Models\Lists::where('list_id', $list_id)->whereNull('parent')->with(['children'])->get();

@@ -4,7 +4,6 @@ namespace Aboleon\Publisher\Models;
 
 use Aboleon\Framework\Models\Accesskeys;
 use Aboleon\Framework\Models\User;
-use Illuminate\Support\Facades\Storage;
 use Aboleon\Framework\Traits\{
     Locale,
     Responses,
@@ -12,14 +11,14 @@ use Aboleon\Framework\Traits\{
 };
 use Aboleon\Publisher\Repositories\Tables;
 use Illuminate\Database\Eloquent\{
+    Builder,
     Model,
     Relations\BelongsTo,
     Relations\HasMany,
-    Relations\HasOne,
     Relations\MorphOne,
-    SoftDeletes,
-    Builder
+    SoftDeletes
 };
+use Illuminate\Support\Facades\Storage;
 
 class Publisher extends Model
 {
@@ -112,19 +111,20 @@ class Publisher extends Model
         return $this->belongsTo(User::class, 'author_id');
     }
 
-    public function metaImage(): string|null
+    public function metaImage(int $width = null): string|null
     {
+
         $dims = (new FileUploadImages)->setWidthHeight(cache('publisher_configs')->where('id', $this->type)->first()['configs']['meta']['img']);
-        $meta_img = $this->key() . '/meta_' . $dims[0]['width'] . '.jpg';
+        $meta_img = $this->key() . '/meta_' . ($width ?: $dims[0]['width']) . '.jpg';
 
         return (Storage::disk('publisher')->exists($meta_img)) ? Storage::disk('publisher')->url($meta_img) : null;
     }
 
-    public function printMetaImage(?string $class=null, ?string $alt=null): string|null
+    public function printMetaImage(int $width = null, ?string $class = null, ?string $alt = null): string|null
     {
-        $meta_img = $this->metaImage();
+        $meta_img = $this->metaImage($width);
         if ($meta_img) {
-           return '<img class="'.($class ?? 'img-fluid').'" src="'.$meta_img .'" alt="'.($alt ?? $this->title).'"/>';
+            return '<img class="' . ($class ?? 'img-fluid') . '" src="' . $meta_img . '" alt="' . ($alt ?? $this->title) . '"/>';
         }
         return null;
     }
@@ -150,17 +150,17 @@ class Publisher extends Model
         return $this;
     }
 
-    public function contentOfCategory(string $type, int $node, array $categories, int $limit=null)
+    public function contentOfCategory(string $type, int $node, array $categories, int $limit = null)
     {
         $type_id = Configs::where('type', $type)->first()->id;
 
         return Publisher::select('publisher.id as id', 'publisher.*')->where('type', $type_id)
-            ->join('publisher_content as b', function($join) use($categories, $node) {
-                $join->on('b.pages_id','=','publisher.id')->where('b.node_id',$node)->whereIn('value', $categories);
-            })->distinct()->with('content','accesskey')->inRandomOrder()->take($limit)->get();
+            ->join('publisher_content as b', function ($join) use ($categories, $node) {
+                $join->on('b.pages_id', '=', 'publisher.id')->where('b.node_id', $node)->whereIn('value', $categories);
+            })->distinct()->with('content', 'accesskey')->inRandomOrder()->take($limit)->get();
     }
 
-    public function scopeExclude($query, array $exclude=[])
+    public function scopeExclude($query, array $exclude = [])
     {
         if ($exclude) {
             $query->whereNotIn('publisher.id', $exclude);
