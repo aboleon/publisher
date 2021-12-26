@@ -2,12 +2,11 @@
 
 namespace Aboleon\Publisher;
 
-use Aboleon\Framework\Components\MetaTags;
 use Aboleon\Publisher\Models\Configs;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Gate;
 use Aboleon\Publisher\Components\{
     Layout,
+    MetaTags,
     OrganizerLaunchpad,
     OrganizerNodeFields,
     OrganizerNodeParams,
