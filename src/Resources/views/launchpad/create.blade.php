@@ -32,7 +32,10 @@
                     <div class="col-2 mt-3">
                         <x-aboleon.framework-bootstrap-radio name="configs[meta][tags]" label="Meta tags" :values="[1=>'Oui', 0=>'Non']" :affected="old('configs.meta.tags') ?? ( $data['configs']['meta']['tags'] ?? 1 ) "/>
                     </div>
-                    <div class="col-10 mt-3">
+                    <div class="col-2 mt-3">
+                        <x-aboleon.framework-bootstrap-radio name="configs[replicable]" label="Réplicable" :values="[0=>'Non',1=>'Oui']" :affected="old('configs.replicable') ?? ( $data['configs']['replicable'] ?? 0 ) "/>
+                    </div>
+                    <div class="col-8 mt-3">
                         <x-aboleon.framework-bootstrap-input name="configs[meta][img]" label="Formats des images" :value="old('configs.meta.img') ??  ($data['configs']['meta']['img'] ?? null)" placeholder="Dimensions des images. Ex: 1920,1080;680,320;  Par défaut: 1920,1080;400,auto"/>
                     </div>
                 </div>

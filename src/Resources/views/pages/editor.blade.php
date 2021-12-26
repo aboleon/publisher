@@ -35,18 +35,18 @@
             </fieldset>
             <ul id="tabs" class="nav nav-tabs admintabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link {{ empty($page->title) ? 'active' :'' }}" id="tab_meta_tab" data-bs-toggle="tab" data-bs-target="#tab_meta" type="button" role="tab" aria-controls="tab_meta" aria-selected="true">Méta</button>
+                    <button class="nav-link active" id="tab_meta_tab" data-bs-toggle="tab" data-bs-target="#tab_meta" type="button" role="tab" aria-controls="tab_meta" aria-selected="true">Méta</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link {{ !empty($page->title) ? 'active' :'' }}" id="tab_content_tab" data-bs-toggle="tab" data-bs-target="#tab_content" type="button" role="tab" aria-controls="tab_content" aria-selected="true">Contenu</button>
+                    <button class="nav-link" id="tab_content_tab" data-bs-toggle="tab" data-bs-target="#tab_content" type="button" role="tab" aria-controls="tab_content" aria-selected="true">Contenu</button>
                 </li>
             </ul>
 
             <div class="tab-content base">
-                <div class="tab-pane fade {{ !empty($page->title) ? 'show active' :'' }}" id="tab_content" role="tabpanel" aria-labelledby="tab_content_tab">
+                <div class="tab-pane fade" id="tab_content" role="tabpanel" aria-labelledby="tab_content_tab">
                     @include('aboleon.publisher::pages.shared.form')
                 </div>
-                <div class="tab-pane mb-4 fade {{ empty($page->title) ? 'show active' :'' }}" id="tab_meta" role="tabpanel" aria-labelledby="tab_meta_tab">
+                <div class="tab-pane mb-4 fade show active" id="tab_meta" role="tabpanel" aria-labelledby="tab_meta_tab">
                     @include('aboleon.publisher::pages.shared.tab_meta')
                 </div>
             </div>

@@ -14,7 +14,7 @@
             <tr>
             <tr>
                 <th>#</th>
-                <th style="width: 50%">{!! trans('aboleon.publisher::ui.meta.MetaSlug') !!}</th>
+                <th style="width: 50%">{!! trans('aboleon.framework::ui.title') !!}</th>
                 <th>ID</th>
                 <th>{!! trans('aboleon.framework::ui.created') !!}</th>
                 <th>{!! trans('aboleon.framework::ui.buttons.actions') !!}</th>

@@ -5,19 +5,17 @@ namespace Aboleon\Publisher\Http\Controllers;
 use Aboleon\Framework\Traits\Locale;
 use Aboleon\Framework\Traits\Responses;
 use Aboleon\Framework\Traits\Validation;
-use Aboleon\Publisher\Repositories\Tables;
-use App\Http\Publisher\Controllers\Controller;
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\RedirectResponse;
-use Aboleon\Publisher\Exceptions\ContentUknownException;
 use Aboleon\Publisher\Models\{
     Configs,
     ConfigsElements,
     Nodes,
-    Pages,
-    PagesCreateContent,
-    PagesEditContent};
+    Pages
+};
+use Aboleon\Publisher\Repositories\Tables;
+use App\Http\Publisher\Controllers\Controller;
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Artisan;
 use Throwable;
 
 class LaunchpadController extends \Aboleon\Publisher\Http\Controllers\Controller
@@ -60,43 +58,44 @@ class LaunchpadController extends \Aboleon\Publisher\Http\Controllers\Controller
 
     public function update(Configs $launchpad): RedirectResponse
     {
-      //  de(request());
+        //  de(request());
         $this->requestValidation();
         $this->validation_rules['type'] = 'required|unique:' . Tables::fetch('configs') . ',type,' . $launchpad->id;
         $this->validation();
         //de(request('config'));
 
-      //  try {
-            $launchpad->update($this->validated_data);
+        //  try {
+        $launchpad->update($this->validated_data);
 
-            if (request()->has('config.elements')) {
-                foreach (request('config.elements') as $section) {
-                    if (!array_key_exists('id', $section)) {
-                        unset($section['is_deleted'],$section['uuid']);
-                        Nodes::makeSet($launchpad, $section);
-                    } else {
-                        Nodes::updateNode($section);
-                        $elements = $section['elements'] ?? [];
-                        if ($elements) {
-                            foreach ($elements as $element) {
-                                if (!array_key_exists('id', $element)) {
-                                    unset($element['is_deleted'],$element['uuid']);
-                                    Nodes::find($section['id'])->children()->save(new Nodes($element));
-                                } else {
-                                    Nodes::updateNode($element, (int)$section['id']);
-                                }
+        if (request()->has('config.elements')) {
+            foreach (request('config.elements') as $section) {
+                if (!array_key_exists('id', $section)) {
+                    unset($section['is_deleted'], $section['uuid']);
+                    Nodes::makeSet($launchpad, $section);
+                } else {
+                    Nodes::updateNode($section);
+                    $elements = $section['elements'] ?? [];
+                    if ($elements) {
+                        foreach ($elements as $element) {
+                            if (!array_key_exists('id', $element)) {
+                                unset($element['is_deleted'], $element['uuid']);
+                                Nodes::find($section['id'])->children()->save(new Nodes($element));
+                            } else {
+                                Nodes::updateNode($element, (int)$section['id']);
                             }
                         }
                     }
                 }
             }
-            $this->responseSuccess("Le type de contenu a été mis à jour.");
-            $this->redirect_to = route('aboleon.publisher.launchpad.edit', $launchpad->id);
-     /*   } catch (Throwable $e) {
-            $this->responseException($e);
-        } finally { */
-            return $this->sendResponse();
-     //   }
+        }
+        Artisan::call('cache:clear');
+        $this->responseSuccess("Le type de contenu a été mis à jour.");
+        $this->redirect_to = route('aboleon.publisher.launchpad.edit', $launchpad->id);
+        /*   } catch (Throwable $e) {
+               $this->responseException($e);
+           } finally { */
+        return $this->sendResponse();
+        //   }
     }
 
     public function store(): RedirectResponse
@@ -117,6 +116,8 @@ class LaunchpadController extends \Aboleon\Publisher\Http\Controllers\Controller
 
             $this->responseSuccess("Le type de contenu a été créé.");
             $this->redirect_to = route('aboleon.publisher.launchpad.index');
+
+            Artisan::call('cache:clear');
 
         } catch (Throwable $e) {
             $this->responseException($e);
@@ -159,7 +160,7 @@ class LaunchpadController extends \Aboleon\Publisher\Http\Controllers\Controller
     {
         $this->validation_rules = [
             'title' => 'required',
-          //  'config' => 'required|array',
+            //  'config' => 'required|array',
             'configs' => 'required|array'
         ];
 
@@ -167,8 +168,8 @@ class LaunchpadController extends \Aboleon\Publisher\Http\Controllers\Controller
             'title.required' => trans('aboleon.framework::validations.required', ['param' => 'Le titre']),
             'type.required' => trans('aboleon.framework::validations.required', ['param' => 'Le type de contenu']),
             'type.unique' => trans('aboleon.framework::validations.unique', ['param' => 'Le type de contenu <em>' . request('type') . '</em>']),
-         //   'config.required' => trans('aboleon.framework::validations.required', ['param' => 'La configuration du contenu']),
-          //  'config.array' => "La configuration des contenus est obligatoire.",
+            //   'config.required' => trans('aboleon.framework::validations.required', ['param' => 'La configuration du contenu']),
+            //  'config.array' => "La configuration des contenus est obligatoire.",
         ];
 
     }
