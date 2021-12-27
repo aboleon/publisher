@@ -62,6 +62,10 @@ class ConfigsElements
             'type' => 'associated',
             'label' => 'Contenu associé'
         ],
+        [
+            'type' => 'form',
+            'label' => 'Formulaire'
+        ],
     ];
 
     public function only(string|array $elements): array

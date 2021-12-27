@@ -15,9 +15,9 @@ use Illuminate\Database\Eloquent\{
     Model,
     Relations\BelongsTo,
     Relations\HasMany,
+    Relations\HasOne,
     Relations\MorphOne,
-    SoftDeletes
-};
+    SoftDeletes};
 use Illuminate\Support\Facades\Storage;
 
 class Publisher extends Model
@@ -166,5 +166,10 @@ class Publisher extends Model
             $query->whereNotIn('publisher.id', $exclude);
         }
         return $query;
+    }
+
+    public function form(): HasOne
+    {
+        return $this->hasOne(Forms::class, 'publisher_id');
     }
 }

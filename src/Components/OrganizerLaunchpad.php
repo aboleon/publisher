@@ -10,6 +10,7 @@ use Illuminate\View\Component;
 class OrganizerLaunchpad extends Component
 {
     public Collection $listables;
+    public Collection $formables;
 
     public function __construct(
         public string $section = 'left',
@@ -20,6 +21,7 @@ class OrganizerLaunchpad extends Component
             return $item['params']['belongs'] == 'organizer_' . $this->section;
         });
         $this->listables = Configs::listables();
+        $this->formables = collect(config('forms'));
     }
 
     public function render(): Renderable

@@ -56,12 +56,12 @@
                 </div>
                 <div id="organizer_elements" class="d-flex">
                     @foreach($elements as $type)
-                        <div{!! array_key_exists('tags', $type) ? ' data-tags="'.$type['tags'].'"' :'' !!} {!! array_key_exists('replicable', $type) ? ' data-replicable' :'' !!} id="{{ $type['type'] }}">
+                        <div {!! array_key_exists('tags', $type) ? ' data-tags="'.$type['tags'].'"' :'' !!} {!! array_key_exists('replicable', $type) ? ' data-replicable' :'' !!} id="{{ $type['type'] }}">
                             {{ $type['label'] }}
-                    </div>
-                @endforeach
-        </div>
-        </fieldset>
+                        </div>
+                    @endforeach
+                </div>
+            </fieldset>
 
         </div>
         <x-aboleon.framework-btn-save/>
@@ -75,6 +75,12 @@
     <template id="associatables">
         @forelse($associatables as $key => $title)
             <option value="{{ $key }}">{{ $title }}</option>
+        @empty
+        @endforelse
+    </template>
+    <template id="formables">
+        @forelse($formables as $form)
+            <option value="{{ $form['name'] }}">{{ __('forms.labels.'.$form['name']) }}</option>
         @empty
         @endforelse
     </template>

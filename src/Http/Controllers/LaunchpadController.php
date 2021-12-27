@@ -40,6 +40,7 @@ class LaunchpadController extends \Aboleon\Publisher\Http\Controllers\Controller
             'elements' => (new ConfigsElements)->all(),
             'listables' => Configs::listables(),
             'associatables' => Configs::associatables(),
+            'formables' => collect(config('forms'))
         ]);
     }
 
@@ -53,6 +54,7 @@ class LaunchpadController extends \Aboleon\Publisher\Http\Controllers\Controller
             'elements' => (new ConfigsElements)->forGroup($data->group),
             'listables' => Configs::listables(),
             'associatables' => Configs::associatables(),
+            'formables' => collect(config('forms'))
         ]);
     }
 

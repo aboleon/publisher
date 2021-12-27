@@ -48,6 +48,21 @@
                                     <span class="btn btn-info btn-sm pt-2 create-list">Créer</span>
                                 </div>
                             @endif
+
+                            @if ($el['type'] == 'form')
+                                <div class="d-flex mt-2 params">
+                                    <select class="form-control me-2" name="{{$e}}[params][form_id]">
+                                        <option>-- Formulaire --</option>
+                                        @forelse($formables as $form)
+                                            <option value="{{ $form['name'] }}"{{$el['params']['form_id'] == $form['name'] ? ' selected' :''}}>
+                                                {{ __('forms.labels.'.$form['name']) }}
+                                            </option>
+                                        @empty
+                                        @endforelse
+                                    </select>
+                                    <span class="btn btn-info btn-sm pt-2 create-list">Créer</span>
+                                </div>
+                            @endif
                             <x-aboleon.publisher-organizer-node-fields :name="$e" :node="$el"/>
                         </div>
                     @endforeach

@@ -5,6 +5,7 @@ namespace Aboleon\Publisher;
 use Aboleon\Publisher\Models\Configs;
 use Illuminate\Support\Facades\Cache;
 use Aboleon\Publisher\Components\{
+    Form,
     Layout,
     MetaTags,
     OrganizerLaunchpad,
@@ -37,6 +38,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/Resources/lang', 'aboleon.publisher');
         $this->loadViewComponentsAs('aboleon.publisher', [
             Layout::class,
+            Form::class,
             OrganizerLaunchpad::class,
             OrganizerNodeFields::class,
             OrganizerNodeParams::class,
