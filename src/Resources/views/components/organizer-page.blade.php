@@ -45,14 +45,14 @@
                             @case('associated')
                             @php
                                 $associated = Publisher::where('type', $element['params']['associated_id'])->select('title','id','published')->get();
-                                $associated_config = $page->config['associated'][$element['params']['associated_id']]['id'] ?? [];
+                                $associated_config = $page->config['associated'][$element['params']['associated_id']] ?? [];
                                 $associated_ids = $associated_config ? collect($associated_config['id']) : collect();
                             @endphp
                             <h4>{{$element->title}}</h4>
                             <div class="associated associated_id_{{ $element['params']['associated_id'] }} sortables">
                                 @forelse($associated as $ass)
                                     <x-aboleon.framework-bootstrap-checkbox class="sortable" name="meta[config][associated][{{$element['params']['associated_id']}}][id][]" :id="$ass->id" :label="$ass->title . (is_null($ass->published) ? ' <span class=text-danger>Hors ligne</span>':'')" :affected="$associated_ids" />
-                                        <input type="hidden" class="order" name="meta[config][associated][{{$element['params']['associated_id']}}][order][{{ $ass->id }}]" value="{{ $associated_config['id']['order'][$ass->id] ?? $loop->iteration }}"/>
+                                        <input type="hidden" class="order" name="meta[config][associated][{{$element['params']['associated_id']}}][order][{{ $ass->id }}]" value="{{ $associated_config['order'][$ass->id] ?? $loop->iteration }}"/>
                                 @empty
                                 @endforelse
                             </div>
