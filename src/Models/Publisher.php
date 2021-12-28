@@ -35,6 +35,11 @@ class Publisher extends Model
         'nav_title',
         'url'
     ];
+
+    protected $casts = [
+        'config' => 'array',
+    ];
+
     public bool $forceDelete = false;
     protected $guarded = [];
 

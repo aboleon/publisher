@@ -30,7 +30,7 @@
                         <x-aboleon.framework-bootstrap-input name="group" label="Groupe" :value="old('group') ?? $data->group"/>
                     </div>
                     <div class="col-2 mt-3">
-                        <x-aboleon.framework-bootstrap-radio name="configs[meta][tags]" label="Meta tags" :values="[1=>'Oui', 0=>'Non']" :affected="old('configs.meta.tags') ?? ( $data['configs']['meta']['tags'] ?? 1 ) "/>
+                        <x-aboleon.framework-bootstrap-radio name="configs[meta][tags]" label="Meta tags" :values="[1=>'Oui', 0=>'Non']" :affected="old('configs.meta.tags') ?? ( empty($data['configs']['meta']['tags']) ? 0 : 1 ) "/>
                     </div>
                     <div class="col-2 mt-3">
                         <x-aboleon.framework-bootstrap-radio name="configs[replicable]" label="Réplicable" :values="[0=>'Non',1=>'Oui']" :affected="old('configs.replicable') ?? ( $data['configs']['replicable'] ?? 0 ) "/>

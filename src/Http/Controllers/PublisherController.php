@@ -70,7 +70,6 @@ class PublisherController extends Controller
     public function update(Publisher $page): RedirectResponse
     {
         // try {
-
         Meta::make($page);
         Publisher::updateElements($page);
 

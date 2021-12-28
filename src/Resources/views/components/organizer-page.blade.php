@@ -26,15 +26,44 @@
                             @case('email')
                             <x-aboleon.framework-bootstrap-input type="email" name="{{ $name_loc }}" :value="$value" :label="$element->title"/>
                             @break
+
+                            @case('link')
+                            <h2 class="pt-4">Lien</h2>
+                            <x-aboleon.framework-bootstrap-input name="{{ $name_loc.'[link]' }}" :value="$value['link'] ?? null" label="URL"/>
+                            <div class="my-2">
+                                <x-aboleon.framework-bootstrap-input name="{{ $name_loc.'[btn]' }}" :value="$value['btn'] ?? null" label="Texte bouton" class=""/>
+                            </div>
+                            <x-aboleon.framework-bootstrap-select name="{{ $name_loc.'[target]' }}" :values="['_self'=>'-- par défaut--','_blank'=>'Nouvelle fenêtre']" label="Texte bouton" :affected="$value['target'] ?? null"/>
+                            @break
+
                             @case('editor_lite')
                             @case('editor')
                             <x-aboleon.framework-bootstrap-textarea :className="$element->type == 'intro' ? 'simplified' :'textarea'" name="{{ $name_loc }}" :value="$value" :label="$element->title"/>
                             @break
+
+
+                            @case('associated')
+                            @php
+                                $associated = Publisher::where('type', $element['params']['associated_id'])->select('title','id','published')->get();
+                                $associated_config = $page->config['associated'][$element['params']['associated_id']]['id'] ?? [];
+                                $associated_ids = $associated_config ? collect($associated_config['id']) : collect();
+                            @endphp
+                            <h4>{{$element->title}}</h4>
+                            <div class="associated associated_id_{{ $element['params']['associated_id'] }} sortables">
+                                @forelse($associated as $ass)
+                                    <x-aboleon.framework-bootstrap-checkbox class="sortable" name="meta[config][associated][{{$element['params']['associated_id']}}][id][]" :id="$ass->id" :label="$ass->title . (is_null($ass->published) ? ' <span class=text-danger>Hors ligne</span>':'')" :affected="$associated_ids" />
+                                        <input type="hidden" class="order" name="meta[config][associated][{{$element['params']['associated_id']}}][order][{{ $ass->id }}]" value="{{ $associated_config['id']['order'][$ass->id] ?? $loop->iteration }}"/>
+                                @empty
+                                @endforelse
+                            </div>
+                            @break
+
+
                             @case('list')
                             @php
                                 $list_id = $element['params']['list_id'];
                                     if (!array_key_exists($list_id, $listable_options)) {
-                                        if($element['params']['tag'] == 'select') {
+                                        if(in_array($element['params']['tag'], ['select','radio'])) {
                                             $listable_options[$list_id] =\Aboleon\Publisher\Models\Lists::where('list_id', $list_id)->orderBy('content')->pluck('content')->toArray();
                                         }
                                         if ($element['params']['tag'] == 'checkbox') {
@@ -83,6 +112,13 @@
                                         </div>
                                         @break
 
+                                        @case('radio')
+                                        <strong>{{ $element->title }}</strong>
+                                        <div class="listables">
+                                            <x-aboleon.framework-bootstrap-radio name="{{ $name_loc }}" label="" :values="$listable_options[$list_id]" :affected="$value"/>
+                                        </div>
+                                        @break
+
                                     @endswitch
                                     <span class="btn btn-info btn-sm create-list-entry mt-2">Créer</span>
 
@@ -127,3 +163,24 @@
         </section>
     @endforeach
 @endif
+@push('css')
+    <link rel="stylesheet" href="{{ asset('vendor/jquery-ui/jquery-ui.min.css') }}">
+@endpush
+@push('js')
+    <script src="{{ asset('vendor/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script>
+      $(function () {
+        $('.sortables').each(function () {
+          let c = $(this);
+          $(this).sortable({
+            stop: function (event, ui) {
+              c.find('.order').each(function (index) {
+                $(this).val(index);
+                console.log($(this).find('.order'), index);
+              });
+            },
+          });
+        });
+      });
+    </script>
+@endpush

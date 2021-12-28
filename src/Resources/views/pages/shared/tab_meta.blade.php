@@ -11,22 +11,25 @@
                         <label class="form-label">{!! trans('aboleon.framework::ui.form_labels.title') !!}</label>
                         <input type="text" name="meta[title][{{$locale}}]" value="{{ $page->translation('title',$locale) }}" class="form-control toslug" data-slug="url"/>
                     </div>
-                    <div class="mb-3">
-                        <x-aboleon.framework-bootstrap-textarea name="meta[abstract][{{$locale}}]" :value="$page->translation('abstract',$locale)" :label="trans('aboleon.framework::ui.form_labels.meta_resume')"/>
-                    </div>
-                    <div class="mb-3">
-                        <x-aboleon.framework-bootstrap-input name="meta[url][{{$locale}}]" :value="$page->translation('url',$locale)" label="URL" className="slug"/>
-                    </div>
-                    <div class="mb-5">
-                        <x-aboleon.framework-bootstrap-input name="meta[nav_title][{{$locale}}]" :value="$page->translation('nav_title',$locale)" label="Titre dans la navigation"/>
-                    </div>
-                    <div class="mb-3">
-                        <label>{!! trans('aboleon.framework::ui.form_labels.meta_title') !!}</label>
-                        <input type="text" name="meta[m_title][{{$locale}}]" value="{{ $page->translation('m_title',$locale) }}" class="form-control"/>
-                    </div>
-                    <div class="mb-3">
-                        <label>{!! trans('aboleon.framework::ui.form_labels.meta_desc') !!}</label>
-                        <textarea rows="3" name="meta[m_desc][{{$locale}}]" class="form-control mceNonEditable">{{ $page->translation('m_desc',$locale) }}</textarea>
+
+                    <div class="{{ empty($config['configs']['meta']['tags']) ? 'd-none':'' }}">
+                        <div class="mb-3">
+                            <x-aboleon.framework-bootstrap-textarea name="meta[abstract][{{$locale}}]" :value="$page->translation('abstract',$locale)" :label="trans('aboleon.framework::ui.form_labels.meta_resume')"/>
+                        </div>
+                        <div class="mb-3">
+                            <x-aboleon.framework-bootstrap-input name="meta[url][{{$locale}}]" :value="$page->translation('url',$locale)" label="URL" className="slug"/>
+                        </div>
+                        <div class="mb-5">
+                            <x-aboleon.framework-bootstrap-input name="meta[nav_title][{{$locale}}]" :value="$page->translation('nav_title',$locale)" label="Titre dans la navigation"/>
+                        </div>
+                        <div class="mb-3">
+                            <label>{!! trans('aboleon.framework::ui.form_labels.meta_title') !!}</label>
+                            <input type="text" name="meta[m_title][{{$locale}}]" value="{{ $page->translation('m_title',$locale) }}" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label>{!! trans('aboleon.framework::ui.form_labels.meta_desc') !!}</label>
+                            <textarea rows="3" name="meta[m_desc][{{$locale}}]" class="form-control mceNonEditable">{{ $page->translation('m_desc',$locale) }}</textarea>
+                        </div>
                     </div>
                 </div>
             @endforeach

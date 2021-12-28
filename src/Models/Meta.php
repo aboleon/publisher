@@ -33,6 +33,9 @@ class Meta extends Model
 
     public static function make(Publisher $page): void
     {
+        if (request()->has('meta.config')) {
+            $page->config = request('meta.config');
+        }
         foreach ($page->translatable as $value) {
             foreach (config('translatable.locales') as $locale) {
                 $data = request('meta.' . $value . '.' . $locale);

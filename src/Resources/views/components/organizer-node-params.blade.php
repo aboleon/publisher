@@ -14,7 +14,7 @@
             <select name="{{$name}}[params][associated_id]" class="form-control w-50 me-1">
                 <option>-- Contenu associé --</option>
                 @forelse($associatables as $associated_id => $associated_title)
-                    <option{{ $associated_id == $node['params']['associated_id'] ? ' selected' : '' }}>{{ $associated_title }}</option>
+                    <option value="{{$associated_id}}" {{ $associated_id == $node['params']['associated_id'] ? ' selected' : '' }}>{{ $associated_title }}</option>
                 @empty
                 @endforelse
             </select>
