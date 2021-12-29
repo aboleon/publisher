@@ -173,6 +173,11 @@ class Publisher extends Model
         return $query;
     }
 
+    public function scopePublished($query)
+    {
+         return  $query->whereNotNull('published');
+    }
+
     public function form(): HasOne
     {
         return $this->hasOne(Forms::class, 'publisher_id');

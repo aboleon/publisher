@@ -31,7 +31,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         });
 
         Cache::rememberForever('publisher_configs', function() {
-           return Configs::with('nodes')->get();
+           return Configs::with('nodes.children')->get();
         });
 
         $this->loadViewsFrom(__DIR__ . '/Resources/views', 'aboleon.publisher');
