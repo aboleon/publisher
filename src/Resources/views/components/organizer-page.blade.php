@@ -46,7 +46,7 @@
                             @php
                                 $associated = Publisher::where('type', $element['params']['associated_id'])->select('title','id','published')->get();
                                 $associated_config = $page->config['associated'][$element['params']['associated_id']] ?? [];
-                                $associated_ids = $associated_config ? collect($associated_config['id']) : collect();
+                                $associated_ids = collect($associated_config['id'] ?? []);
                             @endphp
                             <h4>{{$element->title}}</h4>
                             <div class="associated associated_id_{{ $element['params']['associated_id'] }} sortables">
