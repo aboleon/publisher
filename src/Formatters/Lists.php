@@ -15,6 +15,7 @@ class Lists
     public array $listable = [];
     public string $prefix;
     protected $collection;
+    protected string $assigned_pairs = '';
 
 
     public function __construct()
@@ -103,10 +104,17 @@ class Lists
     public function filterAssigned(Collection $content): static
     {
         $this->listable['assigned'] = $content->where('node_id', $this->listable['node_id'])->pluck('value')->toArray();
-        $this->listable['names'] = $this->listable['assigned']
-            ? collect(Listables::whereIn('id', $this->listable['assigned'])->get()->toArray())
-            : null;
 
+        if ($this->listable['assigned']) {
+
+            $this->assigned_pairs = implode('_', $this->listable['assigned']);
+
+            if (!isset($this->listable['names'][$this->assigned_pairs])) {
+                $this->listable['names'][$this->assigned_pairs] = $this->listable['assigned']
+                    ? collect(Listables::whereIn('id', $this->listable['assigned'])->get()->toArray())
+                    : null;
+            }
+        }
         return $this;
     }
 
@@ -131,7 +139,7 @@ class Lists
 
     public function links(): array
     {
-        return $this->regroup($this->listable['names'])->fetchLinks();
+        return $this->regroup($this->listable['names'][$this->assigned_pairs])->fetchLinks();
     }
 
 

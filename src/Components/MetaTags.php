@@ -14,6 +14,6 @@ class MetaTags extends Component
 
     public function render(): Renderable
     {
-        return view('aboleon.framework::components.meta-tags');
+        return view('aboleon.publisher::components.meta-tags');
     }
 }
