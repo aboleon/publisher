@@ -13,7 +13,6 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     protected $defer = false;
-    protected $namespace = '\Aboleon\Publisher\Http\Controllers';
     public const HOME = '/';
 
     /**
@@ -49,7 +48,6 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::prefix(config('aboleon_publisher.route', 'aboleon/publisher'))
             ->middleware(['web','auth:sanctum'])
-            ->namespace($this->namespace)
             ->name('aboleon.publisher.')
             ->group(function () {
                 include __DIR__ . '/Routes/web.php';

@@ -59,6 +59,21 @@ class PublisherController extends Controller
 
     public function edit(Publisher $page): Renderable
     {
+        return view('aboleon.publisher::pages.editor')->with([
+            'page' => $page->load('configs.nodes', 'content'),
+            'config' => $page->configs,
+            'current_locale' => $this->locale()
+        ]);
+    }
+
+
+    public function editable(string $type): Renderable
+    {
+        $page = Publisher::where('type', Configs::where('type', $type)->value('id'))->first();
+
+        if (!$page) {
+            return view('aboleon.publisher::pages.404');
+        }
 
         return view('aboleon.publisher::pages.editor')->with([
             'page' => $page->load('configs.nodes', 'content'),

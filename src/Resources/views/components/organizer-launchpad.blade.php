@@ -22,7 +22,7 @@
                             $type = (new \Aboleon\Publisher\Models\ConfigsElements)->element($el['type']);
                             $e = $s.'[elements]['. $el['id']. ']';
                         @endphp
-                        <div id="node_{{ $el['id'] }}" data-id="{{ $el['id'] }}" data-belongs="{{ $sec['id'] }}" class="mb-3 dropped">
+                        <div id="node_{{ $el['id'] }}" data-id="{{ $el['id'] }}" data-belongs="{{ $sec['id'] }}" class="dropped">
                             <i class="fa fa-plus-circle"></i>
                             <label class="form-label"><span class="badge">{{ $type['label'] ?? ''}}</span></label>
                             <input name="{{$e}}[title]" class="form-control" value="{{ $el['title'] }}"/>
